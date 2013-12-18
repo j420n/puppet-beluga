@@ -1,4 +1,4 @@
-name    'beluga'
+name    'puppet-beluga'
 version '0.1.0'
 source 'UNKNOWN'
 author 'puppet'
