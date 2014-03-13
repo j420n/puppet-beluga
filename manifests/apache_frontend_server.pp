@@ -7,10 +7,15 @@ class beluga::apache_frontend_server(
 
   #install and configure apache
   class { 'apache':
+    mpm_module          => 'prefork',
     default_mods        => false,
     default_confd_files => false,
     default_vhost       => false,
   }
+
+  include apache::mod::php
+  include apache::mod::rewrite
+
 
   #create a vhost for the frontend lamp server
   apache::vhost { $domain_name:
