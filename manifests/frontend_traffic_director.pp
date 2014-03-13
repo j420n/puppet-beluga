@@ -29,7 +29,7 @@ class beluga::frontend_traffic_director(
     proxy => "http://${lamp_servers['name']}",
   }
 
-  #install and configure varnish for greylog, lamp and lamp_admin
+  #install and configure varnish for graylog, lamp and lamp_admin
   class { 'varnish':
     varnish_listen_port => $varnish_port
   }
@@ -39,7 +39,7 @@ class beluga::frontend_traffic_director(
       #{ name => 'health_check', url => "/health_check" }
     ],
     backends => [
-      $greylog_servers,
+      $graylog_servers,
       $lamp_servers,
       $lamp_admin_servers,
       $solr_servers,
