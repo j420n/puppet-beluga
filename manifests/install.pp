@@ -9,4 +9,6 @@ class beluga::install(){
     ensure   => 'installed',
     provider => 'gem',
   }
+
+  package { 'unzip': }
 }
