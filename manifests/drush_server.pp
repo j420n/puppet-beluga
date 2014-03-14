@@ -6,7 +6,7 @@ class beluga::drush_server(){
 
   exec { 'install-drush':
     path      => ['/usr/bin', '/usr/sbin', '/bin', '/usr/local/bin'],
-    command   => "composer global require drush/drush:6.2",
+    command   => "composer global require drush/drush:6.*",
     onlyif    => "test ! -f ${drush_exec_dir}/drush",
     require   => Class['composer'],
   }
