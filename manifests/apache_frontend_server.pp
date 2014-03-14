@@ -15,10 +15,13 @@ class beluga::apache_frontend_server(
 
   include apache::mod::php
   include apache::mod::rewrite
-
+  class {'mysql::bindings':
+    php_enable         => true,
+  }
 
   #create a vhost for the frontend lamp server
   apache::vhost { $domain_name:
+    override      => 'All',
     port          => $apache_port,
     docroot       => "/var/www/${domain_name}",
     docroot_owner => $owner,
