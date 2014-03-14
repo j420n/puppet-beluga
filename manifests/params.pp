@@ -5,6 +5,8 @@ class beluga::params {
       $hiera_source_dir = 'puppet:///modules/beluga/hieradata'
       $owner = 'root'
       $group = 'root'
+      $unzip_package = 'unzip',
+      $php_gd_package = 'php5-gd',
     }
     default: {
       fail("${::operatingsystem} not supported")
