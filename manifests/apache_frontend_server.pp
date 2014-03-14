@@ -19,6 +19,10 @@ class beluga::apache_frontend_server(
     php_enable         => true,
   }
 
+  package { $beluga::params::php_gd_package:
+    ensure   => 'installed',
+  }
+
   #create a vhost for the frontend lamp server
   apache::vhost { $domain_name:
     override      => 'All',
