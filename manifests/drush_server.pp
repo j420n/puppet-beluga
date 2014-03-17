@@ -5,6 +5,7 @@ class beluga::drush_server(){
   }
   include 'beluga::php'
   $drush_exec_dir = '/usr/local/bin'
+  $drush_target_dir = '/usr/local/lib/composer/vendor/bin'
 
   file {'/usr/local/lib/composer':
     ensure => 'directory',
@@ -19,11 +20,9 @@ class beluga::drush_server(){
   }
 
   # Symlink drush executable
-  /*file { " ${drush_exec_dir}/drush":
+  file { "${drush_exec_dir}/drush":
     ensure    => 'link',
-    target    => "${drush_exec_dir}/drush/drush",
-    owner     => $tomcat_user,
-    group     => $tomcat_group,
-  }*/
+    target    => "${drush_target_dir}/drush",
+  }
 
 }
