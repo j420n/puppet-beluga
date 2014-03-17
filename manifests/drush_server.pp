@@ -19,6 +19,13 @@ class beluga::drush_server(){
     require   => [Class['composer', 'beluga::php'], File['/usr/local/lib/composer']],
   }
 
+  #Drush needs to be run as the root user in order to download a dependant Console_Table library
+  exec { 'run-drush':
+    path      => ['/usr/bin', '/usr/sbin', '/bin', '/usr/local/bin'],
+    command   => "${drush_target_dir}/drush",
+    require   => Exec['install-drush'],
+
+  }
   # Symlink drush executable
   file { "${drush_exec_dir}/drush":
     ensure    => 'link',
