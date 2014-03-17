@@ -5,7 +5,7 @@ class beluga::developer_tools(
   if ($install_grunt){
     exec { 'install-grunt':
       path      => ['/usr/bin', '/usr/sbin', '/bin', '/usr/local/bin'],
-      command   => "npm install -g grunt-cli",
+      command   => "/usr/local/node/node-default/bin/npm  install -g grunt-cli",
       require   => Class['nodejs'],
     }
   }
