@@ -12,16 +12,10 @@ class beluga::apache_frontend_server(
     default_confd_files => false,
     default_vhost       => false,
   }
-
   include apache::mod::php
   include apache::mod::rewrite
-  class {'mysql::bindings':
-    php_enable         => true,
-  }
 
-  package { $beluga::params::php_gd_package:
-    ensure   => 'installed',
-  }
+  include beluga::php
 
   #create a vhost for the frontend lamp server
   apache::vhost { $domain_name:

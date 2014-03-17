@@ -1,14 +1,21 @@
 class beluga::drush_server(){
 
-  class { 'composer': }
-
+  class { 'composer':
+    target_dir => '/usr/local/bin',
+  }
+  include 'beluga::php'
   $drush_exec_dir = '/usr/local/bin'
+
+  file {'/usr/local/lib/composer':
+    ensure => 'directory',
+  }
 
   exec { 'install-drush':
     path      => ['/usr/bin', '/usr/sbin', '/bin', '/usr/local/bin'],
-    command   => "composer global require drush/drush:6.*",
+    environment => ['COMPOSER_HOME=/usr/local/lib/composer/'],
+    command   => "composer global require drush/drush:6.* --no-interaction --working-dir=/usr/local/lib/composer",
     onlyif    => "test ! -f ${drush_exec_dir}/drush",
-    require   => Class['composer'],
+    require   => [Class['composer', 'beluga::php'], File['/usr/local/lib/composer']],
   }
 
   # Symlink drush executable

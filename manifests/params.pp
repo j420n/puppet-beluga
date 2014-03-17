@@ -7,6 +7,7 @@ class beluga::params {
       $group = 'root'
       $unzip_package = 'unzip'
       $php_gd_package = 'php5-gd'
+      $php_package = 'php5-cli'
     }
     default: {
       fail("${::operatingsystem} not supported")
