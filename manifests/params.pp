@@ -9,6 +9,7 @@ class beluga::params {
       $php_gd_package = 'php5-gd'
       $php_package = 'php5-cli'
       $php_postrges_package = 'php5-pgsql'
+      $default_ruby_version = 'ruby-1.9'
     }
     default: {
       fail("${::operatingsystem} not supported")
