@@ -8,4 +8,7 @@ class beluga::php (){
   package { $beluga::params::php_gd_package:
     ensure   => 'installed',
   }
+  package { $beluga::params::php_postrges_package:
+    ensure  => 'installed',
+  }
 }
