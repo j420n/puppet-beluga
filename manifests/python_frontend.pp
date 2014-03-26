@@ -4,6 +4,7 @@ class beluga::python_frontend(){
     version    => 'system',
     virtualenv => true,
     pip => true,
+    dev => true,  #we need dev to use pip to install dependencies
   }
 
   class { "uwsgi": }
