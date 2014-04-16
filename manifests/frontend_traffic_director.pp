@@ -1,8 +1,8 @@
 class beluga::frontend_traffic_director(
-  $graylog_servers,
-  $lamp_servers,
-  $lamp_admin_servers,
-  $solr_servers,
+  $graylog_servers = [],
+  $lamp_servers = [],
+  $lamp_admin_servers = [],
+  $solr_servers = [],
   $extra_backends = [],
   $extra_selectors = [],
   $frontend_domain = "frontend",
