@@ -1,5 +1,5 @@
 class beluga::frontend_traffic_director(
-  $graylog_servers = [],
+  $graylog_servers = UNSET,
   $lamp_servers = [],
   $lamp_admin_servers = [],
   $solr_servers = [],
@@ -39,7 +39,6 @@ class beluga::frontend_traffic_director(
       #{ name => 'health_check', url => "/health_check" }
     ],
     backends => [
-      $graylog_servers,
       $lamp_servers,
       $lamp_admin_servers,
       $solr_servers,
