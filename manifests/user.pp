@@ -1,15 +1,15 @@
 define beluga::user (
   $uid,
-  $realname,
-  $pass,
-  $sshkeytype,
-  $sshkey,
+  $realname = '',
+  $pass = '',
+  $sshkeytype = '',
+  $sshkey = '',
 ) {
 
   $homepath =  $beluga::params::home
   $shell    =  $beluga::params::shell
 
-  user { $user:
+  user { $name:
     ensure            =>  'present',
     uid               =>  $uid,
     gid               =>  $title,
@@ -21,33 +21,41 @@ define beluga::user (
     require           =>  Group[$name],
   }
 
-  group { $title:
+  group { $name:
     gid               => $uid,
   }
 
-  file { "${home}/${user}":
+  file { "${homepath}/${name}":
     ensure            =>  directory,
-    owner             =>  $user,
-    group             =>  $user,
-    mode              =>  '0750',
-    require           =>  [ User[$user], Group[$user] ],
+    owner             =>  $name,
+    group             =>  $name,
+    mode              =>  '0755',
+    require           =>  [ User[$name], Group[$name] ],
   }
 
-  file { "${home}/${user}/.ssh":
-    ensure            =>  directory,
-    owner             =>  $user,
-    group             =>  $user,
-    mode              =>  '0700',
-    require           =>  File["${home}/${user}"],
-  }
+}
 
-  if ($sshkey != '') {
-    ssh_authorized_key {$user:
+define beluga::user::key(
+  $ssh_key,
+  $key_type,
+){
+  $homepath =  $beluga::params::home
+  if ($ssh_key != '') {
+    file { "${homepath}/${name}/.ssh":
+      ensure            =>  directory,
+      owner             =>  $name,
+      group             =>  $name,
+      mode              =>  '0700',
+      require           =>  File["${homepath}/${name}"],
+    }
+    ssh_authorized_key {$name:
       ensure          => present,
-      name            => $user,
-      user            => $user,
-      type            => $sshkeytype,
-      key             => $sshkey,
+      name            => $name,
+      user            => $name,
+      type            => $key_type,
+      key             => $ssh_key,
+      target          => "${homepath}/${name}/.ssh/authorized_keys",
+      require         =>  File["${homepath}/${name}/.ssh"],
     }
   }
 }
