@@ -10,7 +10,7 @@ class beluga::params {
       $php_package = 'php5-cli'
       $php_postrges_package = 'php5-pgsql'
       $default_ruby_version = 'ruby-1.9'
-      $home = '/home;'
+      $home = '/home'
       $shell = '/bin/bash'
     }
     default: {
