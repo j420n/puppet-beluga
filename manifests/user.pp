@@ -14,7 +14,7 @@ define beluga::user (
     uid               =>  $uid,
     gid               =>  $title,
     shell             =>  $shell,
-    home              =>  "${home}/${user}",
+    home              =>  "${homepath}/${user}",
     comment           =>  $realname,
     password          =>  $pass,
     managehome        =>  true,
