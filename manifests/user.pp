@@ -32,13 +32,6 @@ define beluga::user (
     mode              =>  '0755',
     require           =>  [ User[$name], Group[$name] ],
   }
-  file { "${homepath}/${name}/.ssh":
-    ensure            =>  directory,
-    owner             =>  $name,
-    group             =>  $name,
-    mode              =>  '0700',
-    require           =>  File["${homepath}/${name}"],
-  }
   if ($ssh_key != '') {
     beluga::user::key{"${name}_default":
       user => $name,
@@ -54,6 +47,13 @@ define beluga::user::key(
   $key_type,
 ){
   $homepath =  $beluga::params::home
+  file { "${homepath}/${user}/.ssh":
+    ensure            =>  directory,
+    owner             =>  $user,
+    group             =>  $user,
+    mode              =>  '0700',
+    require           =>  File["${homepath}/${name}"],
+  }
   ssh_authorized_key {$name:
       ensure          => present,
       name            => $name,
