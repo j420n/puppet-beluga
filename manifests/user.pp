@@ -34,8 +34,8 @@ define beluga::user (
   }
   file { "${homepath}/${name}/.ssh":
     ensure            =>  directory,
-    owner             =>  $user,
-    group             =>  $user,
+    owner             =>  $name,
+    group             =>  $name,
     mode              =>  '0700',
     require           =>  File["${homepath}/${name}"],
   }
