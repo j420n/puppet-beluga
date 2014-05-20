@@ -47,12 +47,10 @@ define beluga::user::key(
   $key_type,
 ){
   $homepath =  $beluga::params::home
-  file { "${homepath}/${user}/.ssh":
-    ensure            =>  directory,
-    owner             =>  $user,
-    group             =>  $user,
-    mode              =>  '0700',
-    require           =>  File["${homepath}/${name}"],
+
+  exec { "create_ssh_directory_${name}":
+    command => "/bin/mkdir -p  ${homepath}/${user}/.ssh; /bin/chown ${user}: ${homepath}/${user}/.ssh",
+    creates => "${homepath}/${user}/.ssh"
   }
   ssh_authorized_key {$name:
       ensure          => present,
@@ -61,6 +59,6 @@ define beluga::user::key(
       type            => $key_type,
       key             => $ssh_key,
       target          => "${homepath}/${user}/.ssh/authorized_keys",
-      require         =>  File["${homepath}/${user}/.ssh"],
+      #require         =>  beluga::user::sshdir,
   }
 }
