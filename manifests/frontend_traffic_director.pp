@@ -34,25 +34,21 @@ class beluga::frontend_traffic_director(
     varnish_listen_port => $varnish_port
   }
 
+  $all_backends = push([$lamp_servers, $lamp_admin_servers, $solr_servers], $extra_backends)
+  $selectors1 = [
+    { backend => 'solr', condition => 'req.http.host ~ "^solr."'},
+    { backend => 'lamp_admin_servers', condition => 'req.http.host ~ "^admin."'}]
+  $selectors2 = push($selectors1, $extra_selectors)
+  $all_selectors = push($selectors2, [ { backend => 'frontend' }])
   class { 'varnish::vcl':
     probes => [
       #{ name => 'health_check', url => "/health_check" }
     ],
-    backends => [
-      $lamp_servers,
-      $lamp_admin_servers,
-      $solr_servers,
-      $extra_backends,
-    ],
+    backends => $all_backends,
     directors => [
       { name => 'frontend', type => 'round-robin', backends => $lamp_servers['name'] }
     ],
-    selectors => [
-      { backend => 'solr', condition => 'req.http.host ~ "^solr."'},
-      { backend => 'lamp_admin_servers', condition => 'req.http.host ~ "^admin."'},
-      $extra_selectors,
-      { backend => 'frontend' }
-    ],
+    selectors => $all_selectors,
   }
 
 }
