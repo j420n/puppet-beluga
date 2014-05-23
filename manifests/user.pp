@@ -4,6 +4,7 @@ define beluga::user (
   $pass = '',
   $key_type = '',
   $ssh_key = '',
+  $groups = [],
 ) {
   $homepath =  $beluga::params::home
   $shell    =  $beluga::params::shell
@@ -12,6 +13,7 @@ define beluga::user (
     ensure            =>  'present',
     uid               =>  $uid,
     gid               =>  $title,
+    groups            =>  $groups,
     shell             =>  $shell,
     home              =>  "${homepath}/${name}",
     comment           =>  $realname,
