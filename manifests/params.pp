@@ -12,6 +12,35 @@ class beluga::params {
       $default_ruby_version = 'ruby-1.9'
       $home = '/home'
       $shell = '/bin/bash'
+
+      $lamp_servers = {
+        name          => 'lamp_servers',
+        host          => '127.0.0.1',
+        port          => 8000,
+        upstream_port => 8881
+      }
+
+      $lamp_admin_servers = {
+        name          => 'lamp_admin_servers',
+        host          => '127.0.0.1',
+        port          => 8000,
+        upstream_port => 8000
+      }
+
+      $solr_servers = {
+        name          => 'solr',
+        host          => '127.0.0.1',
+        port          => 8081,
+        upstream_port => 8080
+      }
+
+      $graylog_servers = {
+        name          => 'graylog',
+        host          => '127.0.0.1',
+        port          => 8000,
+        upstream_port => 8000
+      }
+
     }
     default: {
       fail("${::operatingsystem} not supported")
