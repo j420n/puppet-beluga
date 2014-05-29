@@ -13,4 +13,8 @@ class beluga::install(){
   package { $beluga::params::unzip_package:
     ensure   => 'installed',
   }
+
+  package { 'lsb-release':
+    ensure => installed,
+  }
 }
