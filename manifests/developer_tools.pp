@@ -1,5 +1,6 @@
 class beluga::developer_tools(
   $install_grunt = true,
+  $install_git = false,
 ){
 
   if ($install_grunt){
@@ -11,6 +12,12 @@ class beluga::developer_tools(
       path      => ['/usr/bin', '/usr/sbin', '/bin', '/usr/local/bin'],
       command   => "/usr/local/node/node-default/bin/npm  install -g grunt-cli",
       require   => Class['nodejs'],
+    }
+  }
+
+  if ($install_git){
+    package {'git':
+      ensure => present,
     }
   }
 
