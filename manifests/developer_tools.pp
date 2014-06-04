@@ -1,6 +1,7 @@
 class beluga::developer_tools(
   $install_grunt = true,
   $install_git = false,
+  $install_vim = false,  
 ){
 
   if ($install_grunt){
@@ -17,6 +18,12 @@ class beluga::developer_tools(
 
   if ($install_git){
     package {'git':
+      ensure => present,
+    }
+  }
+
+  if ($install_vim){
+    package {'vim':
       ensure => present,
     }
   }
