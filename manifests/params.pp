@@ -40,7 +40,7 @@ class beluga::params {
   }
 
   case $::osfamily {
-    'CentOS': {
+    'RedHat': {
 
     }
     'Debian': {
