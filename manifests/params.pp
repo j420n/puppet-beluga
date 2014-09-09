@@ -11,6 +11,8 @@ class beluga::params {
   $home = '/home'
   $shell = '/bin/bash'
 
+  $wget_package = 'wget'
+
   $lamp_servers = {
   name          => 'lamp_servers',
   host          => '127.0.0.1',
