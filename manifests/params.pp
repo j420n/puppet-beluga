@@ -13,8 +13,9 @@ class beluga::params {
 
   $wget_package = 'wget'
 
-  $install_jdk = 'present'
+  $install_jdk = true
   $jdk_package = 'default-jdk'
+  $jre_package = 'default-jre'
 
   $lamp_servers = {
   name          => 'lamp_servers',
