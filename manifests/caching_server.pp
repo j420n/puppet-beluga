@@ -5,7 +5,7 @@ class beluga::caching_server(
 ){
 
   class { "tomcat":
-    http_port => 8081,
+    http_port => $port,
   }
 
   class { 'solr':
