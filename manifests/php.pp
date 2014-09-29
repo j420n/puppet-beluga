@@ -1,4 +1,4 @@
-class beluga::php (){
+class beluga::php inherits beluga::params {
   package { $beluga::params::php_package:
     ensure => 'installed'
   }
