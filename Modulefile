@@ -1,7 +1,7 @@
 name    'puppet-beluga'
 version '0.1.0'
 source 'UNKNOWN'
-author 'puppet'
+author 'Silex Consulting'
 license 'Apache License, Version 2.0'
 summary 'UNKNOWN'
 description 'UNKNOWN'

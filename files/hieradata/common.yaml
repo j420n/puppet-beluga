@@ -1,0 +1,4 @@
+---
+beluga::mysql_server::admin_password: password
+beluga::mysql_server::admin_user: root
+beluga::postgress_server::admin_password: password
