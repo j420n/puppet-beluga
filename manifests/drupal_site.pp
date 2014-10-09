@@ -31,31 +31,31 @@ define beluga::drupal_site (
   if ! defined (File["/var/www/private/"]) {
     file { "/var/www/private/":
       ensure => "directory",
-      owner  => "co",
-      group  => "www-data",
+      owner  => $site_owner,
+      group  => $web_group,
       mode   => 775,
     }
   }
   if ! defined (File["/var/www/files/"]) {
     file { "/var/www/files/":
       ensure => "directory",
-      owner  => "co",
-      group  => "www-data",
+      owner  => $site_owner,
+      group  => $web_group,
       mode   => 775,
     }
   }
   if ! defined (File["/var/www/drupal/"]) {
     file { "/var/www/drupal/":
       ensure => "directory",
-      owner  => "co",
-      group  => "www-data",
+      owner  => $site_owner,
+      group  => $web_group,
       mode   => 775,
     }
   }
   file {[ "/var/www/private/${name}/", "/var/www/files/${name}/", "/var/www/drupal/${name}/"]:
     ensure => "directory",
-    owner => "co",
-    group => "www-data",
+    owner => $site_owner  ,
+    group => $web_group,
     mode => 775,
   }
   file {"/var/www/drupal/${name}/logs":
