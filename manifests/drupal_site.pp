@@ -12,6 +12,8 @@ define beluga::drupal_site (
 
 ){
 
+
+
   mysql_user { ["${db_user}@${web_host}"]:
     ensure => 'present',
     password_hash => mysql_password($db_pass),
@@ -74,5 +76,6 @@ define beluga::drupal_site (
     serveraliases => $site_aliases,
     log_level     => "warn",
     logroot => "/var/www/drupal/${name}/logs",
+    require => Class['apache'],
   }
 }
