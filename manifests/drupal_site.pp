@@ -11,9 +11,6 @@ define beluga::drupal_site (
   $site_admin = 'admin@localhost',
 
 ){
-
-
-
   mysql_user { ["${db_user}@${web_host}"]:
     ensure => 'present',
     password_hash => mysql_password($db_pass),
@@ -30,30 +27,7 @@ define beluga::drupal_site (
     ensure  => "present",
     charset => "utf8",
   }
-  if ! defined (File["/var/www/private/"]) {
-    file { "/var/www/private/":
-      ensure => "directory",
-      owner  => $site_owner,
-      group  => $web_group,
-      mode   => 775,
-    }
-  }
-  if ! defined (File["/var/www/files/"]) {
-    file { "/var/www/files/":
-      ensure => "directory",
-      owner  => $site_owner,
-      group  => $web_group,
-      mode   => 775,
-    }
-  }
-  if ! defined (File["/var/www/drupal/"]) {
-    file { "/var/www/drupal/":
-      ensure => "directory",
-      owner  => $site_owner,
-      group  => $web_group,
-      mode   => 775,
-    }
-  }
+  include beluga::drupal_common_files
   file {[ "/var/www/private/${name}/", "/var/www/files/${name}/", "/var/www/drupal/${name}/"]:
     ensure => "directory",
     owner => $site_owner  ,
