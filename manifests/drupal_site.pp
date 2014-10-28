@@ -65,6 +65,7 @@ define beluga::drupal_site (
     owner => $web_user,
     group => $web_group,
   }
+  include beluga::apache_frontend_server
   apache::vhost { $site_url:
     override      => "All",
     port          => 80,
@@ -76,6 +77,5 @@ define beluga::drupal_site (
     serveraliases => $site_aliases,
     log_level     => "warn",
     logroot => "/var/www/drupal/${name}/logs",
-    require => Class['apache'],
   }
 }
