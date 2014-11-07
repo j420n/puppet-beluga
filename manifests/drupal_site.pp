@@ -51,5 +51,26 @@ define beluga::drupal_site (
     serveraliases => $site_aliases,
     log_level     => "warn",
     logroot => "/var/www/drupal/${name}/logs",
+    rewrites => [
+      {
+        rewrite_rule => ['^index\.html$ welcome.html'],
+        rewrite_rule => ['^/update.php / [L,R=404]'],
+        rewrite_rule => ['^/install.php / [L,R=404]'],
+        rewrite_rule => ['^/CHANGELOG.txt / [L,R=404]'],
+        rewrite_rule => ['^/COPYRIGHT.txt / [L,R=404]'],
+        rewrite_rule => ['^/INSTALL.mysql.txt / [L,R=404]'],
+        rewrite_rule => ['^/INSTALL.pgsql.txt / [L,R=404]'],
+        rewrite_rule => ['^/INSTALL.sqlite.txt / [L,R=404]'],
+        rewrite_rule => ['^/INSTALL.txt / [L,R=404]'],
+        rewrite_rule => ['^/LICENSE.txt / [L,R=404]'],
+        rewrite_rule => ['^/MAINTAINERS.txt / [L,R=404]'],
+        rewrite_rule => ['^/README.txt / [L,R=404]'],
+        rewrite_rule => ['^/UPGRADE.txt / [L,R=404]'],
+        rewrite_rule => ['^/authorize.php / [L,R=404]'],
+        rewrite_rule => ['^/cron.php / [L,R=404]'],
+        rewrite_rule => ['^/web.config / [L,R=404]'],
+        rewrite_rule => ['^/xmlrpc.php / [L,R=404]'],
+      },
+    ],
   }
 }
