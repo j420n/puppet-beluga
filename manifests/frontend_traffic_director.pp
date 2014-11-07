@@ -12,11 +12,7 @@ class beluga::frontend_traffic_director(
 ) {
   #install and configure nginx to do the front end routing of traffic
 
-  class { 'nginx': }
-
-  file { '/etc/nginx/conf.d/default.conf':
-    ensure => absent,
-  }
+  include 'nginx'
 
   nginx::resource::upstream { $lamp_servers['name']:
     ensure => present,
