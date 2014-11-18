@@ -16,11 +16,11 @@ define beluga::drupal_site (
     password_hash => mysql_password($db_pass),
   } ->
 
-  mysql_grant { ["${db_user}@${web_host}"]:
+  mysql_grant { ["${db_user}@${web_host}/${db_name}.*"]:
     ensure     => "present",
     options    => ["GRANT"],
     privileges => ["ALL"],
-    table      => "*.*",
+    table      => "${db_name}.*",
     user       => ["${db_user}@${web_host}"],
   }
   mysql_database { "${db_name}":
