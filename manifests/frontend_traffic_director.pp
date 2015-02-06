@@ -14,15 +14,18 @@ class beluga::frontend_traffic_director(
 
   include 'nginx'
 
-  nginx::resource::upstream { $lamp_servers['name']:
+  $ret = inline_template("<%= lamp_servers.each do |lamp_server| ${lampserver}")
+  notify{$ret:}
+
+  nginx::resource::upstream {$lamp_servers:
     ensure => present,
-    members => ["${lamp_servers['host']}:${lamp_servers['upstream_port']}"]
+    #members => inline_template("<%= lamp_servers.each do |lamp_server| \"${lamp_server['host']}:${lamp_server['upstream_port']},\"%>").split
   }
 
   nginx::resource::vhost {$frontend_domain:
     ensure   => present,
     listen_port => $nginx_port,
-    proxy => "http://${lamp_servers['name']}",
+    pproxy => "http://${$frontend_domain}",
   }
 
   #install and configure varnish for graylog, lamp and lamp_admin
