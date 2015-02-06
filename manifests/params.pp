@@ -17,33 +17,33 @@ class beluga::params {
   $jdk_package = 'default-jdk'
   $jre_package = 'default-jre'
 
-  $lamp_servers = {
+  $lamp_servers = [{
   name          => 'lamp_servers',
   host          => '127.0.0.1',
   port          => 8000,
   upstream_port => 8881
-  }
+  }]
 
-  $lamp_admin_servers = {
+  $lamp_admin_servers = [{
   name          => 'lamp_admin_servers',
   host          => '127.0.0.1',
   port          => 8000,
   upstream_port => 8000
-  }
+  }]
 
-  $solr_servers = {
+  $solr_servers = [{
   name          => 'solr',
   host          => '127.0.0.1',
   port          => 8081,
   upstream_port => 8080
-  }
+  }]
 
-  $graylog_servers = {
+  $graylog_servers = [{
   name          => 'graylog',
   host          => '127.0.0.1',
   port          => 8000,
   upstream_port => 8000
-  }
+  }]
 
   case $::osfamily {
     'RedHat': {

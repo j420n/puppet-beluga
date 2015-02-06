@@ -14,7 +14,7 @@ class beluga::frontend_traffic_director(
 
   include 'nginx'
 
-  $ret = inline_template("<%= lamp_servers.each do |lamp_server| ${lampserver}")
+  $ret = inline_template("<%= lamp_servers.each do |lamp_server| ${lamp_server['host']}:${lamp_server['upstream_port']},")
   notify{$ret:}
 
   nginx::resource::upstream {$lamp_servers:
