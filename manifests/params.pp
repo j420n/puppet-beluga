@@ -6,6 +6,7 @@ class beluga::params {
   $unzip_package = 'unzip'
   $php_gd_package = 'php5-gd'
   $php_package = 'php5-cli'
+  $php_ini = '/etc/php5/apache2/php.ini'
   $php_postrges_package = 'php5-pgsql'
   $default_ruby_version = 'ruby-1.9'
   $home = '/home'
@@ -16,6 +17,8 @@ class beluga::params {
   $install_jdk = true
   $jdk_package = 'default-jdk'
   $jre_package = 'default-jre'
+  $apache_port = 8000
+  $php_memory_limit = '256M'
 
   $lamp_servers = [{
   name          => 'lamp_servers',

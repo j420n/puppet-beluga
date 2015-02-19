@@ -1,4 +1,6 @@
-class beluga::php inherits beluga::params {
+class beluga::php(
+  $memory_limit = $beluga::params::php_memory_limit,
+) inherits beluga::params {
   package { $beluga::params::php_package:
     ensure => 'installed'
   }
@@ -10,5 +12,8 @@ class beluga::php inherits beluga::params {
   }
   package { $beluga::params::php_postrges_package:
     ensure  => 'installed',
+  }
+  file {$beluga::params::php_ini:
+    content => template('beluga/php.ini.erb')
   }
 }

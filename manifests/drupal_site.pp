@@ -9,7 +9,7 @@ define beluga::drupal_site (
   $site_url = $name,
   $site_aliases = [],
   $site_admin = 'admin@localhost',
-
+  $port = $beluga::params::apache_port,
 ){
   mysql_user { ["${db_user}@${web_host}"]:
     ensure => 'present',
@@ -42,7 +42,7 @@ define beluga::drupal_site (
   include beluga::apache_frontend_server
   apache::vhost { $site_url:
     override      => "All",
-    port          => 80,
+    port          => $port,
     manage_docroot  => false,
     docroot       => "/var/www/drupal/${name}/current",
     docroot_owner => $site_owner,
@@ -71,6 +71,18 @@ define beluga::drupal_site (
         rewrite_rule => ['^/web.config / [L,R=404]'],
         rewrite_rule => ['^/xmlrpc.php / [L,R=404]'],
       },
+    ],
+  }
+
+  nginx::resource::vhost { $name:
+    proxy_redirect => "http://${name}/ http://\$host/",
+    proxy_set_header => ['X-Real-IP  $remote_addr', 'X-Forwarded-For $remote_addr', 'Host $host'],
+    proxy => "http://upstream-$name",
+  }
+
+  nginx::resource::upstream { "upstream-$name":
+    members => [
+      'localhost:8000',
     ],
   }
 }
