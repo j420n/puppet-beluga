@@ -14,6 +14,7 @@ class beluga::php(
     ensure  => 'installed',
   }
   file {$beluga::params::php_ini:
-    content => template('beluga/php.ini.erb')
+    content => template('beluga/php.ini.erb'),
+    require => Class['apache_frontend_server'],
   }
 }
