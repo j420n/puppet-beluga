@@ -11,7 +11,19 @@ define beluga::drupal_site (
   $site_aliases = hiera("beluga::drupal_site::${name}::site_aliases",'beluga'),
   $site_admin = 'admin@localhost',
   $port = $beluga::params::apache_port,
+  $use_make_file = false,
 ){
+  if ($use_make_file == true){
+    $make_file_location = hiera("beluga::drupal_site::${name}::drush_make_file_location", 'undefined')
+    $make_build_path = hiera("beluga::drupal_site::${name}::drush_make_build_path", "${docroot}/current")
+
+    exec{ 'drush-make':
+      command => "drush make ${make_file_location} ${make_build_path}",
+      path    => "/usr/local/bin/:/bin/",
+    }
+
+  }
+
   mysql_user { ["${db_user}@${web_host}"]:
     ensure => 'present',
     password_hash => mysql_password($db_pass),
