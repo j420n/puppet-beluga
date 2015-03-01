@@ -24,6 +24,7 @@ class beluga::params {
   $jre_package = 'default-jre'
   $apache_port = 8000
   $apache_ssl_port = 443
+  $install_php52 = false 
   $php_memory_limit = '256M'
 
   $lamp_servers = [{
