@@ -13,7 +13,8 @@ define beluga::drupal_site (
   $site_url = hiera("beluga::drupal_site::${name}::site_url", $name),
   $site_aliases = hiera("beluga::drupal_site::${name}::site_aliases", $name),
   $site_admin = 'admin@localhost',
-  $port = $beluga::params::apache_port,
+  $port = hiera("beluga::drupal_site::${name}::port", $beluga::params::apache_port),
+  $ssl_port = hiera("beluga::drupal_site::${name}::ssl_port", $beluga::params::apache_ssl_port),
   $use_make_file = false,
 
 ){
@@ -90,6 +91,44 @@ define beluga::drupal_site (
         rewrite_rule => ['^/xmlrpc.php / [L,R=404]'],
       },
     ],
+  }
+  #DRUPAL SSL VHOST
+  include apache::mod::ssl 
+  apache::vhost { "${site_url}-ssl" :
+    override        => "All",
+    port            => $apache_ssl_port,
+    ssl             => true,
+    manage_docroot  => false,
+    docroot         => $docroot,
+    docroot_owner   => $site_owner,
+    docroot_group   => $web_group,
+    serveradmin     => $site_admin,
+    serveraliases   => $site_aliases,
+    priority        => $vhost_priority,
+    log_level       => $log_level,
+    logroot         => "${drupal_site_dir}/${name}/logs",
+    rewrites        => [
+      {
+        rewrite_rule => ['^index\.html$ welcome.html'],
+        rewrite_rule => ['^/update.php / [L,R=404]'],
+        rewrite_rule => ['^/install.php / [L,R=404]'],
+        rewrite_rule => ['^/CHANGELOG.txt / [L,R=404]'],
+        rewrite_rule => ['^/COPYRIGHT.txt / [L,R=404]'],
+        rewrite_rule => ['^/INSTALL.mysql.txt / [L,R=404]'],
+        rewrite_rule => ['^/INSTALL.pgsql.txt / [L,R=404]'],
+        rewrite_rule => ['^/INSTALL.sqlite.txt / [L,R=404]'],
+        rewrite_rule => ['^/INSTALL.txt / [L,R=404]'],
+        rewrite_rule => ['^/LICENSE.txt / [L,R=404]'],
+        rewrite_rule => ['^/MAINTAINERS.txt / [L,R=404]'],
+        rewrite_rule => ['^/README.txt / [L,R=404]'],
+        rewrite_rule => ['^/UPGRADE.txt / [L,R=404]'],
+        rewrite_rule => ['^/authorize.php / [L,R=404]'],
+        rewrite_rule => ['^/cron.php / [L,R=404]'],
+        rewrite_rule => ['^/web.config / [L,R=404]'],
+        rewrite_rule => ['^/xmlrpc.php / [L,R=404]'],
+      },
+    ],
+    custom_fragment => "#This is a custom comment fragment.",
   }
 
   nginx::resource::vhost { $name:
