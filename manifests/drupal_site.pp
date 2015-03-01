@@ -5,17 +5,21 @@ define beluga::drupal_site (
   $web_host = 'localhost',
   $web_user = hiera("beluga::drupal_site::${name}::web_user",'www-data'),
   $web_group = hiera("beluga::drupal_site::${name}::web_group",'www-data'),
-  $docroot = hiera("beluga::drupal_site::${name}::docroot","/var/www/drupal"),
+  $docroot = hiera("beluga::drupal_site::${name}::docroot","/var/www/drupal/${name}/current"),
+  $drupal_site_dir = hiera("beluga::drupal_site::drupal_site_dir","/var/www/drupal"),
+  $drupal_file_dir = hiera("beluga::drupal_site::drupal_file_dir","/var/www/files"),
+  $private_file_dir = hiera("beluga::drupal_site::private_file_dir","/var/www/private"),
   $site_owner = hiera("beluga::drupal_site::${name}::site_owner",'beluga'),
   $site_url = hiera("beluga::drupal_site::${name}::site_url", $name),
-  $site_aliases = hiera("beluga::drupal_site::${name}::site_aliases",'beluga'),
+  $site_aliases = hiera("beluga::drupal_site::${name}::site_aliases", $name),
   $site_admin = 'admin@localhost',
   $port = $beluga::params::apache_port,
   $use_make_file = false,
+
 ){
   if ($use_make_file == true){
     $make_file_location = hiera("beluga::drupal_site::${name}::drush_make_file_location", 'undefined')
-    $make_build_path = hiera("beluga::drupal_site::${name}::drush_make_build_path", "${docroot}/current")
+    $make_build_path = hiera("beluga::drupal_site::${name}::drush_make_build_path", ${drupal_site_dir}/${name}/stage")
 
     exec{ 'drush-make':
       command => "drush make ${make_file_location} ${make_build_path}",
@@ -41,30 +45,31 @@ define beluga::drupal_site (
     charset => "utf8",
   }
   include beluga::drupal_common_files
-  file {[ "/var/www/private/${name}/", "/var/www/files/${name}/", "/var/www/drupal/${name}/"]:
+  file {[ "${private_file_dir}/${name}/", "${drupal_file_dir}/${name}/", "${drupal_site_dir}/${name}/"]:
     ensure => "directory",
     owner => $site_owner  ,
     group => $web_group,
     mode => 775,
   }
-  file {"/var/www/drupal/${name}/logs":
+  file {"${drupal_site_dir}/${name}/logs":
     ensure => "directory",
     owner => $web_user,
     group => $web_group,
   }
   include beluga::apache_frontend_server
   apache::vhost { $site_url:
-    override      => "All",
-    port          => $port,
+    override        => "All",
+    port            => $port,
+    ssl             => false,
     manage_docroot  => false,
-    docroot       => "/var/www/drupal/${name}/current",
-    docroot_owner => $site_owner,
-    docroot_group => $web_group,
-    serveradmin   => $site_admin,
-    serveraliases => $site_aliases,
-    log_level     => "warn",
-    logroot => "/var/www/drupal/${name}/logs",
-    rewrites => [
+    docroot         => $docroot,
+    docroot_owner   => $site_owner,
+    docroot_group   => $web_group,
+    serveradmin     => $site_admin,
+    serveraliases   => $site_aliases,
+    log_level       => "warn",
+    logroot         => "${drupal_site_dir}/${name}/logs",
+    rewrites        => [
       {
         rewrite_rule => ['^index\.html$ welcome.html'],
         rewrite_rule => ['^/update.php / [L,R=404]'],
