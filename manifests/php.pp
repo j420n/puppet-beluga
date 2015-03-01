@@ -16,6 +16,7 @@ class beluga::php(
       package { $beluga::params::php_cgi_package: } ->
       package { $beluga::params::php_curl_package: } ->
       package { $beluga::params::php_mcrypt_package: } ->
+      package { $beluga::params::php_mysql_package: } ->
       package { $beluga::params::php_postgres_package: }
     }
     default: {
