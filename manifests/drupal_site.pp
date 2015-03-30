@@ -20,7 +20,7 @@ define beluga::drupal_site (
 ){
   if ($use_make_file == true){
     $make_file_location = hiera("beluga::drupal_site::${name}::drush_make_file_location", 'undefined')
-    $make_build_path = hiera("beluga::drupal_site::${name}::drush_make_build_path", ${drupal_site_dir}/${name}/stage")
+    $make_build_path = hiera("beluga::drupal_site::${name}::drush_make_build_path", "${drupal_site_dir}/${name}/stage")
 
     exec{ 'drush-make':
       command => "drush make ${make_file_location} ${make_build_path}",
@@ -130,6 +130,9 @@ define beluga::drupal_site (
     ],
     custom_fragment => "#This is a custom comment fragment.",
   }
+  include nginx
+  include nginx::config
+  include nginx::service
 
   nginx::resource::vhost { $name:
     proxy_redirect => "http://${name}/ http://\$host/",
