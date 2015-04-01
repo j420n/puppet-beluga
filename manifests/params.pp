@@ -7,7 +7,7 @@ class beluga::params {
   $php_gd_package = 'php5-gd'
   $php_package = 'php5-cli'
   $php_ini = '/etc/php5/apache2/php.ini'
-  $php_postrges_package = 'php5-pgsql'
+  $php_postgres_package = 'php5-pgsql'
   $default_ruby_version = 'ruby-1.9'
   $home = '/home'
   $shell = '/bin/bash'
