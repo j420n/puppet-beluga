@@ -10,7 +10,7 @@ class beluga::php(
   package { $beluga::params::php_gd_package:
     ensure   => 'installed',
   }
-  package { $beluga::params::php_postrges_package:
+  package { $beluga::params::php_postgres_package:
     ensure  => 'installed',
   }
   file {$beluga::params::php_ini:
