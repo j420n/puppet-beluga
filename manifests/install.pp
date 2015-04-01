@@ -14,13 +14,28 @@ class beluga::install(){
     ensure   => 'installed',
   }
 
-  package { 'lsb-release':
-    ensure => installed,
+  case $::osfamily {
+    'RedHat': {
+
+    }
+    'Debian': {
+
+      exec { "apt-update":
+        command => "/usr/bin/apt-get update"
+      }
+
+      Exec["apt-update"] -> Package <| |>
+
+      package { 'lsb-release':
+        ensure => installed,
+      }
+
+     }
+     default: {
+       fail("${::operatingsystem} not supported")
+     }
   }
 
-  exec { "apt-update":
-    command => "/usr/bin/apt-get update"
-  }
 
-  Exec["apt-update"] -> Package <| |>
+
 }
