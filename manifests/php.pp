@@ -5,7 +5,7 @@ class beluga::php(
   #you can use a global package parameter
   Package { ensure => "installed" }
 
-  $packages = ["$beluga::params::php_package","$beluga::params::php_gd_package","$beluga::params::php_postgres_package"]
+  $packages = ["$beluga::params::php_cli_package","$beluga::params::php_gd_package","$beluga::params::php_postgres_package"]
 
   package{$packages:}
 
