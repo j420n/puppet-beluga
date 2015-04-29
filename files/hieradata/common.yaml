@@ -10,7 +10,6 @@ classes:
     - nginx::service
     - nginx::package
 
-
 ######################
 #BELUGA CONFIGURATION#
 ######################
@@ -23,6 +22,11 @@ beluga::params::jre_package: default-jre
 #APACHE_FRONTEND_SERVER
 #beluga::apache_frontend_server::params::mpm_module: prefork
 #beluga::apache_frontend_server::apache_port: 80
+#MYSQL
+mysql::server::override_options:
+    mysqld:
+        max_connections: 1024
+        bind-address : 0.0.0.0
 
 #############
 #DRUPAL_SITE#
