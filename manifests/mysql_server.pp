@@ -1,12 +1,10 @@
 class beluga::mysql_server (
-  $admin_password = "UNSET",
+  $admin_password = hiera("beluga::mysql_server::admin_password", undef),
 ){
-  if ("UNSET" == $admin_password){
-    $admin_password = hiera("beluga::mysql_server::admin_password")
-  }
-
   class { '::mysql::server':
     root_password    => $admin_password,
-    override_options => { 'mysqld' => { 'max_connections' => '1024' } }
+    #If mysql override options are set here then we cant set them with hiera. see files/hieradata/common.yaml
+    #override_options => { 'mysqld' => { 'max_connections' => '1024' } }
   }
 }
+
