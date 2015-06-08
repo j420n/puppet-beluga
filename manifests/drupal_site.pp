@@ -2,7 +2,7 @@ define beluga::drupal_site (
   $db_user          = hiera("beluga::drupal_site::${name}::db_user", $name),
   $db_pass          = hiera("beluga::drupal_site::${name}::db_pass", "${name}password"),
   $db_name          = hiera("beluga::drupal_site::${name}::db_name", $name),
-  $docroot          = hiera("beluga::drupal_site::${name}::docroot","/var/www/drupal/${name}/current"),
+  $docroot          = hiera("beluga::drupal_site::${name}::docroot","${drupal_site_dir}/${name}/current"),
   $port             = hiera("beluga::drupal_site::${name}::port", $beluga::params::apache_port),
   $ssl_port         = hiera("beluga::drupal_site::${name}::ssl_port", $beluga::params::apache_ssl_port),
   $site_url         = hiera("beluga::drupal_site::${name}::site_url", $name),
@@ -15,7 +15,7 @@ define beluga::drupal_site (
   $private_file_dir = hiera("beluga::drupal_site::private_file_dir","/var/www/private"),
   $drupal_site_dir  = hiera("beluga::drupal_site::drupal_site_dir","/var/www/drupal"),
   $drupal_file_dir  = hiera("beluga::drupal_site::drupal_file_dir","/var/www/files"),
-  $use_make_file    = false,
+  $use_make_file    = hiera("beluga::drupal_site::use_make_file","false"),
 
 ){
   if ($use_make_file == true){
