@@ -23,8 +23,7 @@ define beluga::drupal_site (
     $make_build_path = hiera("beluga::drupal_site::${name}::drush_make_build_path", "${drupal_site_dir}/${name}/stage")
 
     exec{ 'drush-make':
-      command => "drush make ${make_file_location} ${make_build_path}",
-      path    => "/usr/local/bin/:/bin/",
+      command => "/usr/local/bin/drush make ${make_file_location} ${make_build_path}",
     }
 
   }
@@ -104,7 +103,6 @@ define beluga::drupal_site (
     docroot_group   => $web_group,
     serveradmin     => $site_admin,
     serveraliases   => $site_aliases,
-    priority        => $vhost_priority,
     log_level       => $log_level,
     logroot         => "${drupal_site_dir}/${name}/logs",
     rewrites        => [
