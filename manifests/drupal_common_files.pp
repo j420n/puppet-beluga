@@ -5,19 +5,19 @@ $dsd = hiera("beluga::drupal_site::drupal_site_dir",'/var/www/drupal'),
 ) {
   file { $pfd:
     ensure => "directory",
-    owner  => $web_user,
-    group  => $web_group,
-    mode   => 775,
+    owner  => $site_owner,
+    group  => $site_owner,
+    mode   => 755,
   }
   file { $dfd :
     ensure => "directory",
-    owner  => $web_user,
+    owner  => $site_owner,
     group  => $web_group,
     mode   => 775,
   }
   file { $dsd :
     ensure => "directory",
-    owner  => $web_user,
+    owner  => $site_owner,
     group  => $web_group,
     mode   => 775,
   }
