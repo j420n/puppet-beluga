@@ -1,29 +1,29 @@
 define beluga::drupal_site (
-  $db_user          = hiera("beluga::drupal_site::${name}::db_user", $name),
-  $db_pass          = hiera("beluga::drupal_site::${name}::db_pass", "${name}password"),
-  $db_name          = hiera("beluga::drupal_site::${name}::db_name", $name),
-  $docroot          = hiera("beluga::drupal_site::${name}::docroot","${drupal_site_dir}/${name}/current"),
-  $port             = hiera("beluga::drupal_site::${name}::port", $beluga::params::apache_port),
-  $ssl_port         = hiera("beluga::drupal_site::${name}::ssl_port", $beluga::params::apache_ssl_port),
-  $site_url         = hiera("beluga::drupal_site::${name}::site_url", $name),
-  $site_aliases     = hiera("beluga::drupal_site::${name}::site_aliases", $name),
-  $site_owner       = hiera("beluga::drupal_site::${name}::site_owner",'beluga'),
-  $site_admin       = hiera("beluga::drupal_site::${name}::site_admin", 'admin@localhost'),
-  $web_host         = hiera("beluga::drupal_site::${name}::web_host", 'localhost'),
-  $web_user         = hiera("beluga::drupal_site::${name}::web_user",'www-data'),
-  $web_group        = hiera("beluga::drupal_site::${name}::web_group",'www-data'),
-  $private_file_dir = hiera("beluga::drupal_site::private_file_dir","/var/www/private"),
-  $drupal_site_dir  = hiera("beluga::drupal_site::drupal_site_dir","/var/www/drupal"),
-  $drupal_file_dir  = hiera("beluga::drupal_site::drupal_file_dir","/var/www/files"),
-  $use_make_file    = hiera("beluga::drupal_site::use_make_file","false"),
+  $db_user          = $name,
+  $db_pass          = "${name}password",
+  $db_name          = $name,
+  $docroot          = "${drupal_site_dir}/${name}/current",
+  $port             = $beluga::params::apache_port,
+  $ssl_port         = $beluga::params::apache_ssl_port,
+  $site_url         = $name,
+  $site_aliases     = $name ,
+  $site_owner       = 'beluga',
+  $site_admin       = 'admin@localhost',
+  $web_host         = 'localhost',
+  $web_user         = 'www-data',
+  $web_group        = 'www-data',
+  $private_file_dir = '/var/www/private',
+  $drupal_site_dir  = '/var/www/drupal',
+  $drupal_file_dir  = '/var/www/files',
+  $use_make_file    = 'false',
+  $make_file_path   = 'undefined',
+  $make_build_path  = "${drupal_site_dir}/${name}/current"
 
 ){
   if ($use_make_file == true){
-    $make_file_location = hiera("beluga::drupal_site::${name}::drush_make_file_location", 'undefined')
-    $make_build_path = hiera("beluga::drupal_site::${name}::drush_make_build_path", "${drupal_site_dir}/${name}/stage")
 
     exec{ 'drush-make':
-      command => "/usr/local/bin/drush make ${make_file_location} ${make_build_path}",
+      command => "/usr/local/bin/drush make ${make_file_path} ${make_build_path}",
     }
 
   }
