@@ -11,6 +11,12 @@ define beluga::drupal_site (
   $site_admin = 'admin@localhost',
   $port = $beluga::params::apache_port,
 ){
+
+  if $drupal_sites{
+    $drupal_sites = hiera_hash('drupal_sites')
+    create_resources ( drupal_sites, $drupal_sites )
+  }
+
   mysql_user { ["${db_user}@${web_host}"]:
     ensure => 'present',
     password_hash => mysql_password($db_pass),
