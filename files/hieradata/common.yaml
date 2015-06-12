@@ -8,7 +8,6 @@ classes:
     - beluga::drupal_site
     - nginx::config
     - nginx::service
-    - nginx::package
 
 ######################
 #BELUGA CONFIGURATION#
