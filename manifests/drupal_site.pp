@@ -10,11 +10,11 @@ define beluga::drupal_site (
   $site_aliases = [],
   $site_admin = 'admin@localhost',
   $port = $beluga::params::apache_port,
+  $drupal_sites = hiera_hash('drupal_sites'),
 ){
 
   if $drupal_sites{
-    $drupal_sites = hiera_hash('drupal_sites')
-    create_resources ( drupal_site, $drupal_sites )
+    create_resources ( ::beluga::drupal_site, $drupal_sites )
   }
 
   mysql_user { ["${db_user}@${web_host}"]:
