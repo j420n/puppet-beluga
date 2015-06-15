@@ -5,7 +5,7 @@ define beluga::drupal_site (
   $web_host = 'localhost',
   $web_user = 'www-data',
   $web_group = 'www-data',
-  $site_owner = hiera("beluga::drupal_site::${name}::site_owner",'beluga'),
+  $site_owner = 'beluga',
   $site_url = $name,
   $site_aliases = [],
   $site_admin = 'admin@localhost',
