@@ -10,7 +10,7 @@ define beluga::drupal_site (
   $site_aliases = [],
   $site_admin = 'admin@localhost',
   $port = $beluga::params::apache_port,
-  $drupal_sites = hiera_hash('drupal_sites'),
+  $drupal_sites = hiera_hash('beluga::drupal_sites'),
 ){
 
   if $drupal_sites{
