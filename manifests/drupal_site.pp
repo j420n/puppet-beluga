@@ -12,6 +12,10 @@ define beluga::drupal_site (
   $site_admin = 'admin@localhost',
   $port = $beluga::params::apache_port,
   $drupal_sites = hiera_hash('beluga::drupal_sites'),
+  $use_make_file    = 'false',
+  $make_file_path   = 'undefined',
+  $make_build_path  = "/var/www/drupal/${name}/builds/1",
+  $symlink = "/var/www/drupal/${name}/current",
 ){
 
   if $drupal_sites{
@@ -47,9 +51,6 @@ define beluga::drupal_site (
     group => $web_group,
   }
   include beluga::apache_frontend_server
-
-  $symlink = "/var/www/drupal/${name}/current"
-  $build = "/var/www/drupal/${name}/builds/1"
 
   file { $build:
     ensure => "directory",
