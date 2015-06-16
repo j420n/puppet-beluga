@@ -13,8 +13,7 @@ define beluga::drupal_site (
   $port = $beluga::params::apache_port,
   $use_make_file    = 'false',
   $make_file_path   = 'undefined',
-  $make_build_path  = "/var/www/drupal/${name}/builds/1",
-  $symlink = "/var/www/drupal/${name}/current",
+  $make_build_path  = "/var/www/drupal/${name}/drush_build",
 ){
   mysql_user { ["${db_user}@${web_host}"]:
     ensure => 'present',
@@ -52,9 +51,9 @@ define beluga::drupal_site (
     group => $web_group,
   }
 
-  file { $symlink :
+  file { $docroot :
     ensure => "link",
-    target => $build
+    target => $make_build_path,
   }
 
   apache::vhost { $site_url:
