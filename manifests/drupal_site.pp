@@ -17,11 +17,6 @@ define beluga::drupal_site (
   $make_build_path  = "/var/www/drupal/${name}/builds/1",
   $symlink = "/var/www/drupal/${name}/current",
 ){
-
-  if $drupal_sites{
-    create_resources ( beluga::drupal_site, $drupal_sites )
-  }
-
   mysql_user { ["${db_user}@${web_host}"]:
     ensure => 'present',
     password_hash => mysql_password($db_pass),
@@ -52,7 +47,7 @@ define beluga::drupal_site (
   }
   include beluga::apache_frontend_server
 
-  file { $build:
+  file { $make_build_path:
     ensure => "directory",
     owner => $web_user,
     group => $web_group,
