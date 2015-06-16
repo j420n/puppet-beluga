@@ -14,7 +14,7 @@ define beluga::drupal_site (
 ){
 
   if $drupal_sites{
-    create_resources ( ::beluga::drupal_site, $drupal_sites )
+    create_resources ( beluga::drupal_site, $drupal_sites )
   }
 
   mysql_user { ["${db_user}@${web_host}"]:
@@ -46,6 +46,21 @@ define beluga::drupal_site (
     group => $web_group,
   }
   include beluga::apache_frontend_server
+
+  $symlink = "/var/www/drupal/${name}/current"
+  $build = "/var/www/drupal/${name}/builds/1"
+
+  file { $build:
+    ensure => "directory",
+    owner => $web_user,
+    group => $web_group,
+  }
+
+  file { $symlink :
+    ensure => "link",
+    target => $build
+  }
+
   apache::vhost { $site_url:
     override      => "All",
     port          => $port,
