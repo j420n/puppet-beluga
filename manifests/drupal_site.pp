@@ -11,7 +11,6 @@ define beluga::drupal_site (
   $site_aliases = [],
   $site_admin = 'admin@localhost',
   $port = $beluga::params::apache_port,
-  $drupal_sites = hiera_hash('beluga::drupal_sites'),
   $use_make_file    = 'false',
   $make_file_path   = 'undefined',
   $make_build_path  = "/var/www/drupal/${name}/builds/1",
