@@ -8,7 +8,8 @@ class beluga::mysql_server (
   }
 
   class { '::mysql::server':
-    root_password    => $tmp_admin_password,
-    override_options => { 'mysqld' => { 'max_connections' => '1024' } }
+    root_password    => $admin_password,
+    #If mysql override options are set here then we cant set them with hiera.
+    #override_options => { 'mysqld' => { 'max_connections' => '1024' } }
   }
 }
