@@ -14,6 +14,16 @@ class beluga::params {
 
   $wget_package = 'wget'
 
+  $beluga_users = hiera_hash('beluga::users')
+    if $beluga_users{
+      create_resources ( beluga::user, $beluga_users )
+    }
+
+  $drupal_sites = hiera_hash('beluga::drupal_sites')
+    if $drupal_sites{
+      create_resources ( beluga::drupal_site, $drupal_sites )
+    }
+
   $install_jdk = true
   $jdk_package = 'default-jdk'
   $jre_package = 'default-jre'
