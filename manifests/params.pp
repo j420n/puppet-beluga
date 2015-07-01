@@ -14,12 +14,12 @@ class beluga::params {
 
   $wget_package = 'wget'
 
-  $beluga_users = hiera_hash('beluga::users')
+  $beluga_users = hiera_hash('beluga::users',undef)
     if $beluga_users{
       create_resources ( beluga::user, $beluga_users )
     }
 
-  $drupal_sites = hiera_hash('beluga::drupal_sites')
+  $drupal_sites = hiera_hash('beluga::drupal_sites',undef)
     if $drupal_sites{
       create_resources ( beluga::drupal_site, $drupal_sites )
     }
