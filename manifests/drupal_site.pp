@@ -45,15 +45,16 @@ define beluga::drupal_site (
   }
   include beluga::apache_frontend_server
 
-  file { $make_build_path:
-    ensure => "directory",
-    owner => $web_user,
-    group => $web_group,
-  }
-
-  file { $docroot :
-    ensure => "link",
-    target => $make_build_path,
+  if $use_make_file{
+    file { $make_build_path:
+      ensure => "directory",
+      owner => $web_user,
+      group => $web_group,
+    }
+    file { $docroot :
+      ensure => "link",
+      target => $make_build_path,
+    }
   }
 
   apache::vhost { $site_url:
