@@ -53,8 +53,6 @@ define beluga::drupal_site (
       group => $web_group,
     }
 
-
-
     file { "${private_file_dir}/drush-make-builds":
       ensure => "directory",
       owner  => $web_user,
@@ -98,7 +96,7 @@ define beluga::drupal_site (
     exec{ 'drush-install':
       require => Exec['drush-make'],
       cwd     => "${make_build_path}",
-      command => "/usr/local/bin/drush --yes --verbose site-install silex --db-url=mysql://silex:silexpassword@localhost/silex --account-name=admin --account-pass=password  --site-name='Silex Development'",
+      command => "/usr/local/bin/drush --yes --verbose site-install silex --db-url=mysql://sc:pro.silex-puppet-control.examplepassword@localhost/sc_drupal --account-name=admin --account-pass=password  --site-name='Silex Development'",
     }
 
   }
