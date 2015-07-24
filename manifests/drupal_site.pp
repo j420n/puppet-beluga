@@ -95,7 +95,7 @@ define beluga::drupal_site (
     exec{ 'drush-install':
       require => Exec['drush-make'],
       cwd     => "${make_build_path}",
-      command => "drush --yes --verbose site-install silex --db-url=mysql://silex:silexpassword@localhost/silex --account-name=admin --account-pass=password  --site-name='Silex Development'",
+      command => "/usr/bin/local/drush --yes --verbose site-install silex --db-url=mysql://silex:silexpassword@localhost/silex --account-name=admin --account-pass=password  --site-name='Silex Development'",
     }
 
   }
