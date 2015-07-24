@@ -81,7 +81,7 @@ define beluga::drupal_site (
     notify{ "Installing Drupal site.": }
     exec{ 'drush-install':
       require => Exec['drush-make'],
-      cwd     => "${make_build_path}",
+      cwd     => "${make_build_path}/${name}",
       command => "/usr/local/bin/drush --yes --verbose site-install silex --db-url=mysql://sc:pro.silex-puppet-control.examplepassword@localhost/sc_drupal --account-name=admin --account-pass=password  --site-name='Silex Development'",
     }
 
