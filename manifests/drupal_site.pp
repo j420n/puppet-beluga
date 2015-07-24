@@ -51,10 +51,53 @@ define beluga::drupal_site (
       owner => $web_user,
       group => $web_group,
     }
-    file { $docroot :
-      ensure => "link",
-      target => $make_build_path,
+
+
+
+    file { "${private_file_dir}/drush-make-builds":
+      ensure => "directory",
+      owner  => $web_user,
+      group  => $web_group,
+      mode   => 775,
     }
+
+    file { "${private_file_dir}/drush-make-builds/${name}":
+      ensure => "directory",
+      owner  => $web_user,
+      group  => $web_group,
+      mode   => 775,
+    }
+
+    file { "${docroot}":
+      target => "${private_file_dir}/drush-make-builds/${name}",
+      ensure => "link",
+      owner  => $web_user,
+      group  => $web_group,
+      mode   => 775,
+    }
+
+    notify{ "Removing previous drush build.": }
+    file {'remove_drush_build':
+      ensure => absent,
+      path => "${private_file_dir}/drush-make-builds/${name}/test",
+      recurse => true,
+      purge => true,
+      force => true,
+    }
+
+    notify{ "Make file found at ${$make_file_path}": }
+    exec{ 'drush-make':
+      command => "/usr/local/bin/drush make ${make_file_path} ${make_build_path}",
+      require  => File['remove_drush_build'],
+    }
+
+    notify{ "Installing Drupal site.": }
+    exec{ 'drush-install':
+      require => Exec['drush-make'],
+      cwd     => "${make_build_path}",
+      command => "drush --yes --verbose site-install silex --db-url=mysql://silex:silexpassword@localhost/silex --account-name=admin --account-pass=password  --site-name='Silex Development'",
+    }
+
   }
 
   apache::vhost { $site_url:
