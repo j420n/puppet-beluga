@@ -84,18 +84,14 @@ define beluga::drupal_site (
     }
 
     notify{ "Removing previous drush build.": }
-    file {'remove_drush_build':
-      ensure => absent,
-      path => "${private_file_dir}/drush-make-builds/${name}/test",
-      recurse => true,
-      purge => true,
-      force => true,
-    }
+      exec{ 'remove_drush_build':
+      command => "/bin/rm -rf ${make_build_path}",
+     }
 
     notify{ "Make file found at ${$make_file_path}": }
     exec{ 'drush-make':
       command => "/usr/local/bin/drush make ${make_file_path} ${make_build_path}",
-      require  => File['remove_drush_build'],
+      require  => Exec['remove_drush_build'],
     }
 
     notify{ "Installing Drupal site.": }
