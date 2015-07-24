@@ -53,22 +53,8 @@ define beluga::drupal_site (
       group => $web_group,
     }
 
-    file { "${private_file_dir}/drush-make-builds":
-      ensure => "directory",
-      owner  => $web_user,
-      group  => $web_group,
-      mode   => 775,
-    }
-
-    file { "${private_file_dir}/drush-make-builds/${name}":
-      ensure => "directory",
-      owner  => $web_user,
-      group  => $web_group,
-      mode   => 775,
-    }
-
     file { "${docroot}":
-      target => "${private_file_dir}/drush-make-builds/${name}",
+      target => "${make_build_path}/${name}",
       ensure => "link",
       owner  => $web_user,
       group  => $web_group,
@@ -83,12 +69,12 @@ define beluga::drupal_site (
 
     notify{ "Removing previous drush build.": }
       exec{ 'remove_drush_build':
-      command => "/bin/rm -rf ${make_build_path}",
+      command => "/bin/rm -rf ${make_build_path}/${name}",
      }
 
     notify{ "Make file found at ${$make_file_path}": }
     exec{ 'drush-make':
-      command => "/usr/local/bin/drush make ${make_file_path} ${make_build_path}",
+      command => "/usr/local/bin/drush make ${make_file_path} ${make_build_path}/${name}",
       require  => Exec['remove_drush_build'],
     }
 
