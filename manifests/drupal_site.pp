@@ -14,6 +14,7 @@ define beluga::drupal_site (
   $use_make_file    = 'false',
   $make_file_path   = 'undefined',
   $make_build_path  = "/var/www/drupal/${name}/drush_build",
+  $drupal_repo  = "https://github.com/j420n/silex_d7.git",
 ){
   mysql_user { ["${db_user}@${web_host}"]:
     ensure => 'present',
@@ -76,6 +77,12 @@ define beluga::drupal_site (
       mode   => 775,
     }
 
+    notify{ "Cloning Drupal repository from ${drupal_repo}": }
+      exec{ 'clone-drupal':
+      command => "/usr/bin/git clone ${drupal_repo}",
+      cwd     => "/tmp",
+    }
+
     notify{ "Removing previous drush build.": }
     file {'remove_drush_build':
       ensure => absent,
@@ -95,7 +102,7 @@ define beluga::drupal_site (
     exec{ 'drush-install':
       require => Exec['drush-make'],
       cwd     => "${make_build_path}",
-      command => "/usr/bin/local/drush --yes --verbose site-install silex --db-url=mysql://silex:silexpassword@localhost/silex --account-name=admin --account-pass=password  --site-name='Silex Development'",
+      command => "/usr/local/bin/drush --yes --verbose site-install silex --db-url=mysql://silex:silexpassword@localhost/silex --account-name=admin --account-pass=password  --site-name='Silex Development'",
     }
 
   }
