@@ -66,7 +66,7 @@ define beluga::drupal_site (
       exec{ 'clone-drupal':
       command => "/usr/bin/git clone ${drupal_repo} drupal_repo",
       cwd     => "/tmp",
-      onlyif => "test ! -d /tmp/drupal_repo"
+      onlyif => "/usr/bin/test ! -d /tmp/drupal_repo"
     }
 
     notify{ "Removing previous drush build.": }
