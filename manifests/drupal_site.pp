@@ -69,6 +69,13 @@ define beluga::drupal_site (
       onlyif => "/usr/bin/test ! -d /tmp/drupal_repo"
     }
 
+    notify{ "Updating existing Drupal repository from ${drupal_repo}": }
+      exec{ 'update-drupal':
+      command => "/usr/bin/git pull origin master",
+      cwd     => "/tmp/drupal_repo",
+      onlyif => "/usr/bin/test -d /tmp/drupal_repo"
+    }
+
     notify{ "Removing previous drush build.": }
       exec{ 'remove_drush_build':
       command => "/bin/rm -rf ${make_build_path}/${name}",
