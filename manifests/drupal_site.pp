@@ -61,10 +61,12 @@ define beluga::drupal_site (
       mode   => 775,
     }
 
+
     notify{ "Cloning Drupal repository from ${drupal_repo}": }
       exec{ 'clone-drupal':
-      command => "/usr/bin/git clone ${drupal_repo}",
+      command => "/usr/bin/git clone ${drupal_repo} drupal_repo",
       cwd     => "/tmp",
+      onlyif => "test ! -d /tmp/drupal_repo"
     }
 
     notify{ "Removing previous drush build.": }
@@ -81,7 +83,7 @@ define beluga::drupal_site (
     notify{ "Installing Drupal site.": }
     exec{ 'drush-install':
       require => Exec['drush-make'],
-      cwd     => "${make_build_path}/${name}",
+      cwd     => $docroot,
       command => "/usr/local/bin/drush --yes --verbose site-install silex --db-url=mysql://${db_user}:${db_pass}@localhost/${db_name} --account-name=admin --account-pass=password  --site-name='Silex Development'",
     }
 
