@@ -43,13 +43,13 @@ mode => 775,
 
 file { $public_file_dir :
 ensure => "directory",
-owner => $web_user,
+owner => $site_owner,
 group => $web_group,
 }
 
 file { "${public_file_dir}/logs":
 ensure => "directory",
-owner => $web_user,
+owner => $site_owner,
 group => $web_group,
 }
 
