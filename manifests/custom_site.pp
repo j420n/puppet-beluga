@@ -2,7 +2,7 @@ define beluga::custom_site (
 $db_user          = hiera("beluga::custom_site::${name}::db_user", $name),
 $db_pass          = hiera("beluga::custom_site::${name}::db_pass", "${name}password"),
 $db_name          = hiera("beluga::custom_site::${name}::db_name", $name),
-$docroot          = hiera("beluga::custom_site::${name}::docroot","/var/www/custom-sites/${name}/current"),
+$docroot          = hiera("beluga::custom_site::${name}::docroot","/var/www/${name}/current"),
 $port             = hiera("beluga::custom_site::${name}::port", $beluga::params::apache_port),
 $ssl_port         = hiera("beluga::custom_site::${name}::ssl_port", $beluga::params::apache_ssl_port),
 $site_url         = hiera("beluga::custom_site::${name}::site_url", $name),
