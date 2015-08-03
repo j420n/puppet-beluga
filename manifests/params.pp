@@ -24,6 +24,11 @@ class beluga::params {
       create_resources ( beluga::drupal_site, $drupal_sites )
     }
 
+  $custom_sites = hiera_hash('beluga::custom_sites',undef)
+    if $custom_sites{
+      create_resources ( beluga::custom_site, $custom_sites )
+    }
+
   $install_jdk = true
   $jdk_package = 'default-jdk'
   $jre_package = 'default-jre'
