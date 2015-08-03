@@ -12,8 +12,8 @@ $site_admin       = hiera("beluga::custom_site::${name}::site_admin", 'admin@loc
 $web_host         = hiera("beluga::custom_site::${name}::web_host", 'localhost'),
 $web_user         = hiera("beluga::custom_site::${name}::web_user",'www-data'),
 $web_group        = hiera("beluga::custom_site::${name}::web_group",'www-data'),
-$private_file_dir = hiera("beluga::custom_site::${name}::private_file_dir","/var/www/private/custom-sites/${name}"),
-$public_file_dir  = hiera("beluga::custom_site::${name}::private_file_dir","/var/www/custom-sites/${name}"),
+$private_file_dir = hiera("beluga::custom_site::${name}::private_file_dir","/var/www/private/${name}"),
+$public_file_dir  = hiera("beluga::custom_site::${name}::public_file_dir","/var/www/${name}"),
 
 ){
 
@@ -32,20 +32,6 @@ user       => ["${db_user}@${web_host}"],
 mysql_database { "${db_name}":
 ensure  => "present",
 charset => "utf8",
-}
-
-file { "/var/www/private/custom-sites/" :
-ensure => "directory",
-owner => $site_owner  ,
-group => $web_group,
-mode => 775,
-}
-
-file { "/var/www/custom-sites/" :
-ensure => "directory",
-owner => $site_owner  ,
-group => $web_group,
-mode => 775,
 }
 
 file { $private_file_dir :
