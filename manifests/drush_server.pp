@@ -14,7 +14,7 @@ class beluga::drush_server(){
   exec { 'install-drush':
     path      => ['/usr/bin', '/usr/sbin', '/bin', '/usr/local/bin'],
     environment => ['COMPOSER_HOME=/usr/local/lib/composer/'],
-    command   => "composer global require drush/drush:6.* --no-interaction --working-dir=/usr/local/lib/composer",
+    command   => "composer global require drush/drush:7.* --no-interaction --working-dir=/usr/local/lib/composer",
     onlyif    => "test ! -f ${drush_exec_dir}/drush",
     require   => [Class['composer', 'beluga::php'], File['/usr/local/lib/composer']],
   }
