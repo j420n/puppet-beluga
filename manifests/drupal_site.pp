@@ -15,6 +15,7 @@ define beluga::drupal_site (
   $make_file_path   = 'undefined',
   $make_build_path  = "/var/www/drupal/${name}/drush_build",
   $drupal_repo  = "https://github.com/j420n/silex_d7.git",
+  $clone_path  = "/tmp/drupal_repo",
 ){
   mysql_user { ["${db_user}@${web_host}"]:
     ensure => 'present',
@@ -64,16 +65,16 @@ define beluga::drupal_site (
 
     notify{ "Cloning Drupal repository from ${drupal_repo}": }
       exec{ 'clone-drupal':
-      command => "/usr/bin/git clone ${drupal_repo} drupal_repo",
+      command => "/usr/bin/git clone ${drupal_repo} ${clone_path}",
       cwd     => "/tmp",
-      onlyif => "/usr/bin/test ! -d /tmp/drupal_repo"
+      onlyif => "/usr/bin/test ! -d ${clone_path}"
     }
 
     notify{ "Updating existing Drupal repository from ${drupal_repo}": }
       exec{ 'update-drupal':
       command => "/usr/bin/git pull origin master",
-      cwd     => "/tmp/drupal_repo",
-      onlyif => "/usr/bin/test -d /tmp/drupal_repo"
+      cwd     => "${clone_path}",
+      onlyif => "/usr/bin/test -d ${clone_path}"
     }
 
     notify{ "Removing previous drush build.": }
