@@ -1,21 +1,21 @@
 define beluga::drupal_site (
-  $db_user = $name,
-  $db_pass = "${name}password",
-  $db_name = $name,
-  $web_host = 'localhost',
-  $web_user = 'www-data',
-  $web_group = 'www-data',
-  $site_owner = 'beluga',
-  $site_url = $name,
-  $docroot = "/var/www/drupal/${name}/current",
-  $site_aliases = [],
-  $site_admin = 'admin@localhost',
-  $port = $beluga::params::apache_port,
+  $db_user          = $name,
+  $db_pass          = "${name}password",
+  $db_name          = $name,
+  $web_host         = 'localhost',
+  $web_user         = 'www-data',
+  $web_group        = 'www-data',
+  $site_owner       = 'beluga',
+  $site_url         = $name,
+  $docroot          = "/var/www/drupal/${name}/current",
+  $site_aliases     = [],
+  $site_admin       = 'admin@localhost',
+  $port             = $beluga::params::apache_port,
   $use_make_file    = 'false',
   $make_file_path   = 'undefined',
   $make_build_path  = "/var/www/drupal/${name}/drush_build",
-  $drupal_repo  = "https://github.com/j420n/silex_d7.git",
-  $clone_path  = "/tmp/drupal_repo",
+  $drupal_repo      = "https://github.com/j420n/silex_d7.git",
+  $clone_path       = "/tmp/drupal_repo",
 ){
   mysql_user { ["${db_user}@${web_host}"]:
     ensure => 'present',
@@ -48,6 +48,7 @@ define beluga::drupal_site (
   include beluga::apache_frontend_server
 
   if $use_make_file{
+
     file { $make_build_path:
       ensure => "directory",
       owner => $web_user,
@@ -62,25 +63,24 @@ define beluga::drupal_site (
       mode   => 775,
     }
 
-
     notify{ "Cloning Drupal repository from ${drupal_repo}": }
-      exec{ 'clone-drupal':
+    exec{ 'clone-drupal':
       command => "/usr/bin/git clone ${drupal_repo} ${clone_path}",
       cwd     => "/tmp",
       onlyif => "/usr/bin/test ! -d ${clone_path}"
     }
 
     notify{ "Updating existing Drupal repository from ${drupal_repo}": }
-      exec{ 'update-drupal':
+    exec{ 'update-drupal':
       command => "/usr/bin/git pull origin master",
       cwd     => "${clone_path}",
       onlyif => "/usr/bin/test -d ${clone_path}"
     }
 
     notify{ "Removing previous drush build.": }
-      exec{ 'remove_drush_build':
+    exec{ 'remove_drush_build':
       command => "/bin/rm -rf ${make_build_path}/${name}",
-     }
+    }
 
     notify{ "Make file found at ${$make_file_path}": }
     exec{ 'drush-make':
