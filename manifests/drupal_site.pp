@@ -2,18 +2,19 @@ define beluga::drupal_site (
   $db_user          = $name,
   $db_pass          = "${name}password",
   $db_name          = $name,
+  $prefix           = '',
   $web_host         = 'localhost',
   $web_user         = 'www-data',
   $web_group        = 'www-data',
   $site_owner       = 'beluga',
-  $site_url         = $name,
-  $docroot          = "/var/www/drupal/${name}/current",
+  $site_url         = "${prefix}.${name}",
+  $docroot          = "/var/www/drupal/${site_url}/current",
   $site_aliases     = [],
   $site_admin       = 'admin@localhost',
   $port             = $beluga::params::apache_port,
   $use_make_file    = 'false',
   $make_file_path   = 'undefined',
-  $make_build_path  = "/var/www/drupal/${name}/drush_build",
+  $make_build_path  = "/var/www/drupal/${site_url}/drush_build",
   $drupal_repo      = "https://github.com/j420n/silex_d7.git",
   $clone_path       = "/tmp/drupal_repo",
 ){
@@ -34,13 +35,13 @@ define beluga::drupal_site (
     charset => "utf8",
   }
   include beluga::drupal_common_files
-  file {[ "/var/www/private/${name}/", "/var/www/files/${name}/", "/var/www/drupal/${name}/"]:
+  file {[ "/var/www/private/${site_url}/", "/var/www/files/${site_url}/", "/var/www/drupal/${site_url}/"]:
     ensure => "directory",
     owner => $site_owner  ,
     group => $web_group,
     mode => 775,
   }
-  file {"/var/www/drupal/${name}/logs":
+  file {"/var/www/drupal/${site_url}/logs":
     ensure => "directory",
     owner => $web_user,
     group => $web_group,
@@ -56,7 +57,7 @@ define beluga::drupal_site (
     }
 
     file { "${docroot}":
-      target => "${make_build_path}/${name}",
+      target => "${make_build_path}/${site_url}",
       ensure => "link",
       owner  => $web_user,
       group  => $web_group,
@@ -79,12 +80,12 @@ define beluga::drupal_site (
 
     notify{ "Removing previous drush build.": }
     exec{ 'remove_drush_build':
-      command => "/bin/rm -rf ${make_build_path}/${name}",
+      command => "/bin/rm -rf ${make_build_path}/${site_url}",
     }
 
     notify{ "Make file found at ${$make_file_path}": }
     exec{ 'drush-make':
-      command => "/usr/local/bin/drush make ${make_file_path} ${make_build_path}/${name}",
+      command => "/usr/local/bin/drush make ${make_file_path} ${make_build_path}/${site_url}",
       require  => Exec['remove_drush_build'],
     }
 
@@ -107,7 +108,7 @@ define beluga::drupal_site (
     serveradmin   => $site_admin,
     serveraliases => $site_aliases,
     log_level     => "warn",
-    logroot => "/var/www/drupal/${name}/logs",
+    logroot => "/var/www/drupal/${site_url}/logs",
     rewrites => [
       {
         rewrite_rule => ['^index\.html$ welcome.html'],
@@ -131,13 +132,13 @@ define beluga::drupal_site (
     ],
   }
 
-  nginx::resource::vhost { $name:
-    proxy_redirect => "http://${name}/ http://\$host/",
+  nginx::resource::vhost { $site_url:
+    proxy_redirect => "http://${$site_url}/ http://\$host/",
     proxy_set_header => ['X-Real-IP  $remote_addr', 'X-Forwarded-For $remote_addr', 'Host $host'],
     proxy => "http://upstream-$name",
   }
 
-  nginx::resource::upstream { "upstream-$name":
+  nginx::resource::upstream { "upstream-${site_url}":
     members => [
       'localhost:8000',
     ],
