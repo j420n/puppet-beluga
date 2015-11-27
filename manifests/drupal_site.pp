@@ -136,7 +136,7 @@ define beluga::drupal_site (
   nginx::resource::vhost { $site_url:
     proxy_redirect => "http://${$site_url}/ http://\$host/",
     proxy_set_header => ['X-Real-IP  $remote_addr', 'X-Forwarded-For $remote_addr', 'Host $host'],
-    proxy => "http://upstream-$name",
+    proxy => "http://upstream-$site_url",
   }
 
   nginx::resource::upstream { "upstream-${site_url}":
