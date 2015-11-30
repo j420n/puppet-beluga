@@ -11,6 +11,7 @@ class beluga::apache_frontend_server(
   include apache::mod::php
   include apache::mod::rewrite
   include apache::mod::wsgi
+  include apache::mod::rpaf
 
   include beluga::php
 
