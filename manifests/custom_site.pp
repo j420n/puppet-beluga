@@ -1,19 +1,20 @@
 define beluga::custom_site (
+$prefix           = hiera("beluga::custom_site::${name}::prefix", $prefix),
 $db_user          = hiera("beluga::custom_site::${name}::db_user", $name),
 $db_pass          = hiera("beluga::custom_site::${name}::db_pass", "${name}password"),
 $db_name          = hiera("beluga::custom_site::${name}::db_name", $name),
-$docroot          = hiera("beluga::custom_site::${name}::docroot","/var/www/${name}/current"),
+$docroot          = hiera("beluga::custom_site::${name}::docroot","/var/www/${prefix}.${name}/current"),
 $port             = hiera("beluga::custom_site::${name}::port", $beluga::params::apache_port),
 $ssl_port         = hiera("beluga::custom_site::${name}::ssl_port", $beluga::params::apache_ssl_port),
-$site_url         = hiera("beluga::custom_site::${name}::site_url", $name),
+$site_url         = hiera("beluga::custom_site::${name}::site_url", "${prefix}.${name}"),
 $site_aliases     = hiera("beluga::custom_site::${name}::site_aliases", $name),
 $site_owner       = hiera("beluga::custom_site::${name}::site_owner",'beluga'),
 $site_admin       = hiera("beluga::custom_site::${name}::site_admin", 'admin@localhost'),
 $web_host         = hiera("beluga::custom_site::${name}::web_host", 'localhost'),
 $web_user         = hiera("beluga::custom_site::${name}::web_user",'www-data'),
 $web_group        = hiera("beluga::custom_site::${name}::web_group",'www-data'),
-$private_file_dir = hiera("beluga::custom_site::${name}::private_file_dir","/var/www/private/${name}"),
-$public_file_dir  = hiera("beluga::custom_site::${name}::public_file_dir","/var/www/${name}"),
+$private_file_dir = hiera("beluga::custom_site::${name}::private_file_dir","/var/www/private/${prefix}.${name}"),
+$public_file_dir  = hiera("beluga::custom_site::${name}::public_file_dir","/var/www/${prefix}.${name}"),
 
 ){
 
