@@ -5,7 +5,7 @@ $db_pass          = hiera("beluga::custom_site::${name}::db_pass", "${name}passw
 $db_name          = hiera("beluga::custom_site::${name}::db_name", $name),
 $docroot          = hiera("beluga::custom_site::${name}::docroot","/var/www/${prefix}.${name}/current"),
 $port             = hiera("beluga::custom_site::${name}::port", $beluga::params::apache_port),
-$ssl_port         = hiera("beluga::custom_site::${name}::ssl_port", $beluga::params::apache_ssl_port),
+$ssl_port         = hiera("beluga::custom_site::${name}::ssl_port", 443),
 $site_url         = hiera("beluga::custom_site::${name}::site_url", "${prefix}.${name}"),
 $site_aliases     = hiera("beluga::custom_site::${name}::site_aliases", $name),
 $site_owner       = hiera("beluga::custom_site::${name}::site_owner",'beluga'),
@@ -89,11 +89,11 @@ rewrite_rule => ['^/xmlrpc.php / [L,R=404]'],
 },
 ],
 }
-#DRUPAL SSL VHOST
+#CUSTOM SSL VHOST
 include apache::mod::ssl
 apache::vhost { "${site_url}-ssl" :
 override        => "All",
-port            => $apache_ssl_port,
+port            => $ssl_port,
 ssl             => true,
 manage_docroot  => false,
 docroot         => $docroot,
