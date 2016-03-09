@@ -15,6 +15,7 @@ define beluga::drupal_site (
   $use_make_file    = 'false',
   $make_file_path   = 'undefined',
   $install_profile  = 'silex',
+  $admin_email      = 'root@localhost.localdomain',
   $make_build_path  = "/var/www/drupal/${site_url}/drush_build",
   $drupal_repo      = "https://github.com/j420n/silex_d7.git",
   $clone_path       = "/tmp/drupal_repo",
@@ -94,7 +95,7 @@ define beluga::drupal_site (
     exec{ 'drush-install':
       require => Exec['drush-make'],
       cwd     => $docroot,
-      command => "/usr/local/bin/drush --yes --verbose site-install ${install_profile} --db-url=mysql://${db_user}:${db_pass}@localhost/${db_name} --account-name=admin --account-pass=password  --site-name='Silex Development'",
+      command => "/usr/local/bin/drush --yes --verbose site-install ${install_profile} --db-url=mysql://${db_user}:${db_pass}@localhost/${db_name} --account-name=admin --account-pass=password --account-mail=${$admin_email} --site-name='Silex Development'",
     }
 
   }
