@@ -9,6 +9,7 @@ define beluga::drupal_site (
   $site_owner       = 'beluga',
   $site_url         = "${prefix}.${name}",
   $docroot          = "/var/www/drupal/${site_url}/current",
+  $manage_docroot  = hiera("beluga::drupal_site::${name}::manage_docroot", $manage_docroot),
   $site_aliases     = [],
   $site_admin       = 'admin@localhost',
   $port             = $beluga::params::apache_port,
@@ -103,7 +104,7 @@ define beluga::drupal_site (
   apache::vhost { $site_url:
     override      => "All",
     port          => $port,
-    manage_docroot  => false,
+    manage_docroot  => $manage_docroot,
     docroot       => $docroot,
     docroot_owner => $site_owner,
     docroot_group => $web_group,

@@ -1,6 +1,6 @@
 define beluga::custom_site (
 $prefix           = hiera("beluga::custom_site::${name}::prefix", $prefix),
-$manaage_docroot  = hiera("beluga::custom_site::${name}::manage_docroot", $manage_docroot),
+$manage_docroot  = hiera("beluga::custom_site::${name}::manage_docroot", $manage_docroot),
 $db_user          = hiera("beluga::custom_site::${name}::db_user", $name),
 $db_pass          = hiera("beluga::custom_site::${name}::db_pass", "${name}password"),
 $db_name          = hiera("beluga::custom_site::${name}::db_name", $name),
