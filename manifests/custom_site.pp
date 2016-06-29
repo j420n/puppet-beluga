@@ -6,6 +6,7 @@ $db_user          = hiera("beluga::custom_site::${name}::db_user", $name),
 $db_pass          = hiera("beluga::custom_site::${name}::db_pass", "${name}password"),
 $db_name          = hiera("beluga::custom_site::${name}::db_name", $name),
 $docroot          = hiera("beluga::custom_site::${name}::docroot","/var/www/${prefix}.${name}/current"),
+$custom_fragment  = hiera("beluga::custom_site::${name}::custom_fragment","#This is a custom comment fragment."),
 $port             = hiera("beluga::custom_site::${name}::port", $beluga::params::apache_port),
 $ssl_port         = hiera("beluga::custom_site::${name}::ssl_port", 443),
 $site_url         = hiera("beluga::custom_site::${name}::site_url", "${prefix}.${name}"),
@@ -93,6 +94,7 @@ rewrite_rule => ['^/web.config / [L,R=404]'],
 rewrite_rule => ['^/xmlrpc.php / [L,R=404]'],
 },
 ],
+custom_fragment => $custom_fragment,
 }
 #CUSTOM SSL VHOST
 include apache::mod::ssl
@@ -129,7 +131,7 @@ rewrite_rule => ['^/web.config / [L,R=404]'],
 rewrite_rule => ['^/xmlrpc.php / [L,R=404]'],
 },
 ],
-custom_fragment => "#This is a custom comment fragment.",
+custom_fragment => $custom_fragment,
 }
 include nginx
 include nginx::config
