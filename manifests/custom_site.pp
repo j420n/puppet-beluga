@@ -1,6 +1,7 @@
 define beluga::custom_site (
 $prefix           = hiera("beluga::custom_site::${name}::prefix", $prefix),
-$manage_docroot  = hiera("beluga::custom_site::${name}::manage_docroot", $manage_docroot),
+$manage_docroot   = hiera("beluga::custom_site::${name}::manage_docroot", $manage_docroot),
+$enable_db        = hiera("beluga::custom_site::${name}::enable_db", true),
 $db_user          = hiera("beluga::custom_site::${name}::db_user", $name),
 $db_pass          = hiera("beluga::custom_site::${name}::db_pass", "${name}password"),
 $db_name          = hiera("beluga::custom_site::${name}::db_name", $name),
@@ -19,22 +20,25 @@ $public_file_dir  = hiera("beluga::custom_site::${name}::public_file_dir","/var/
 
 ){
 
-mysql_user { ["${db_user}@${web_host}"]:
-ensure => 'present',
-password_hash => mysql_password($db_pass),
-} ->
+if($enable_db){
+  mysql_user { ["${db_user}@${web_host}"]:
+    ensure => 'present',
+    password_hash => mysql_password($db_pass),
+  } ->
 
-mysql_grant { ["${db_user}@${web_host}/${db_name}.*"]:
-ensure     => "present",
-options    => ["GRANT"],
-privileges => ["ALL"],
-table      => "${db_name}.*",
-user       => ["${db_user}@${web_host}"],
+  mysql_grant { ["${db_user}@${web_host}/${db_name}.*"]:
+    ensure     => "present",
+    options    => ["GRANT"],
+    privileges => ["ALL"],
+    table      => "${db_name}.*",
+    user       => ["${db_user}@${web_host}"],
+  }
+  mysql_database { "${db_name}":
+    ensure  => "present",
+    charset => "utf8",
+  }
 }
-mysql_database { "${db_name}":
-ensure  => "present",
-charset => "utf8",
-}
+
 
 file { $private_file_dir :
 ensure => "directory",
