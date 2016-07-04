@@ -17,7 +17,7 @@ define beluga::drupal_site (
   $make_file_path   = 'undefined',
   $install_profile  = 'silex',
   $admin_email      = 'root@localhost.localdomain',
-  $make_build_path  = "/var/www/drupal/${site_url}/drush_build",
+  $make_build_path  = "/var/www/drupal/${docroot}/drush_build",
   $drupal_repo      = "https://github.com/j420n/silex_d7.git",
   $clone_path       = "/tmp/drupal_repo",
 ){
