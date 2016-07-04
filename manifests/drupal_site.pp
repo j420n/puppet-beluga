@@ -69,34 +69,34 @@ define beluga::drupal_site (
     }
     if $clone_drupal{
       notify{ "Cloning Drupal repository from ${drupal_repo}": }
-      exec{ 'clone-drupal':
+      exec{ "clone-drupal-${name}":
         command => "/usr/bin/git clone ${drupal_repo} ${clone_path}",
         cwd     => "/tmp",
         onlyif => "/usr/bin/test ! -d ${clone_path}"
       }
 
       notify{ "Updating existing Drupal repository from ${drupal_repo}": }
-        exec{ 'update-drupal':
+        exec{ "update-drupal-${name}":
         command => "/usr/bin/git pull origin master",
         cwd     => "${clone_path}",
         onlyif => "/usr/bin/test -d ${clone_path}"
       }
     }
 
-    notify{ "Removing previous drush build.": }
-    exec{ 'remove_drush_build':
+    notify{ "Removing previous drush build for ${name}": }
+    exec{ "remove_drush_build-${name}":
       command => "/bin/rm -rf ${make_build_path}/${site_url}",
     }
 
-    notify{ "Make file found at ${$make_file_path}": }
-    exec{ 'drush-make':
+    notify{ "Make file found for ${name} at ${$make_file_path}": }
+    exec{ "drush-make-${name}":
       command => "/usr/local/bin/drush make ${make_file_path} ${make_build_path}/${site_url}",
-      require  => Exec['remove_drush_build'],
+      require  => Exec["remove_drush_build-${name}"],
     }
 
-    notify{ "Installing Drupal site.": }
-    exec{ 'drush-install':
-      require => Exec['drush-make'],
+    notify{ "Installing Drupal site for ${name}.": }
+    exec{ "drush-install-${name}":
+      require => Exec["drush-make-${name}"],
       cwd     => $docroot,
       command => "/usr/local/bin/drush --yes --verbose site-install ${install_profile} --db-url=mysql://${db_user}:${db_pass}@localhost/${db_name} --account-name=admin --account-pass=password --account-mail=${$admin_email} --site-name='Silex Development'",
     }
