@@ -5,7 +5,7 @@ class beluga::drush_server(){
   }
   include 'beluga::php'
   $drush_exec_dir = '/usr/local/bin'
-  $drush_version = '7.*'
+  $drush_version = '8.*'
   $drush_target_dir = '/usr/local/lib/composer/vendor/bin'
 
   file {'/usr/local/lib/composer':
