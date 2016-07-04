@@ -9,11 +9,12 @@ define beluga::drupal_site (
   $site_owner       = 'beluga',
   $site_url         = "${prefix}.${name}",
   $docroot          = "/var/www/drupal/${site_url}/current",
-  $manage_docroot  = hiera("beluga::drupal_site::${name}::manage_docroot", $manage_docroot),
+  $manage_docroot   = hiera("beluga::drupal_site::${name}::manage_docroot", $manage_docroot),
   $site_aliases     = [],
   $site_admin       = 'admin@localhost',
   $port             = $beluga::params::apache_port,
   $use_make_file    = 'false',
+  $clone_drupal     = 'false',
   $make_file_path   = 'undefined',
   $install_profile  = 'silex',
   $admin_email      = 'root@localhost.localdomain',
@@ -66,19 +67,20 @@ define beluga::drupal_site (
       group  => $web_group,
       mode   => 775,
     }
+    if $clone_drupal{
+      notify{ "Cloning Drupal repository from ${drupal_repo}": }
+      exec{ 'clone-drupal':
+        command => "/usr/bin/git clone ${drupal_repo} ${clone_path}",
+        cwd     => "/tmp",
+        onlyif => "/usr/bin/test ! -d ${clone_path}"
+      }
 
-    notify{ "Cloning Drupal repository from ${drupal_repo}": }
-    exec{ 'clone-drupal':
-      command => "/usr/bin/git clone ${drupal_repo} ${clone_path}",
-      cwd     => "/tmp",
-      onlyif => "/usr/bin/test ! -d ${clone_path}"
-    }
-
-    notify{ "Updating existing Drupal repository from ${drupal_repo}": }
-    exec{ 'update-drupal':
-      command => "/usr/bin/git pull origin master",
-      cwd     => "${clone_path}",
-      onlyif => "/usr/bin/test -d ${clone_path}"
+      notify{ "Updating existing Drupal repository from ${drupal_repo}": }
+        exec{ 'update-drupal':
+        command => "/usr/bin/git pull origin master",
+        cwd     => "${clone_path}",
+        onlyif => "/usr/bin/test -d ${clone_path}"
+      }
     }
 
     notify{ "Removing previous drush build.": }
