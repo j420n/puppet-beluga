@@ -85,7 +85,7 @@ define beluga::drupal_site (
 
     notify{ "Removing previous drush build for ${name}": }
     exec{ "remove_drush_build-${name}":
-      command => "/bin/rm -rf ${make_build_path}/${site_url}",
+      command => "/bin/rm -rf ${make_build_path}",
     }
 
     notify{ "Make file found for ${name} at ${$make_file_path}": }
