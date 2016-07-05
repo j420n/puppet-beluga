@@ -101,11 +101,12 @@ define beluga::drupal_site (
     }
 
     file { "${docroot}/sites/default/files":
-    target => "/var/www/files/${site_url}/",
-    ensure => "link",
-    owner  => $web_user,
-    group  => $web_group,
-    mode   => 775,
+      target => "/var/www/files/${site_url}/",
+      ensure => "link",
+      owner  => $web_user,
+      group  => $web_group,
+      mode   => 775,
+      force  => true,
     }
 
     notify{ "Installing Drupal site for ${name}.": }
