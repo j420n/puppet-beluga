@@ -67,13 +67,7 @@ define beluga::drupal_site (
       group  => $web_group,
       mode   => 775,
     }
-    file { "${docroot}/sites/default/files":
-      target => "/var/www/files/${site_url}/",
-      ensure => "link",
-      owner  => $web_user,
-      group  => $web_group,
-      mode   => 775,
-    }
+
     if $clone_drupal{
       notify{ "Cloning Drupal repository from ${drupal_repo} for ${name}": }
       exec{ "clone-drupal-${name}":
@@ -99,6 +93,19 @@ define beluga::drupal_site (
     exec{ "drush-make-${name}":
       command => "/usr/local/bin/drush make ${make_file_path} ${make_build_path}",
       require  => Exec["remove_drush_build-${name}"],
+    }
+
+    notify{ "Removing default files directory for ${name} and symlink to /var/www/files/${site_url}": }
+    exec{ "remove_default_sites_directory-${name}":
+    command => "/bin/rm -rf ${docroot}/sites/default/files",
+    }
+
+    file { "${docroot}/sites/default/files":
+    target => "/var/www/files/${site_url}/",
+    ensure => "link",
+    owner  => $web_user,
+    group  => $web_group,
+    mode   => 775,
     }
 
     notify{ "Installing Drupal site for ${name}.": }
