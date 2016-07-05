@@ -67,6 +67,13 @@ define beluga::drupal_site (
       group  => $web_group,
       mode   => 775,
     }
+    file { "${docroot}/sites/default/files":
+      target => "/var/www/files/${site_url}/",
+      ensure => "link",
+      owner  => $web_user,
+      group  => $web_group,
+      mode   => 775,
+    }
     if $clone_drupal{
       notify{ "Cloning Drupal repository from ${drupal_repo} for ${name}": }
       exec{ "clone-drupal-${name}":
