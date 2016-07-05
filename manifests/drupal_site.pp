@@ -61,7 +61,7 @@ define beluga::drupal_site (
     }
 
     file { "${docroot}":
-      target => "${make_build_path}/${site_url}",
+      target => "${make_build_path}",
       ensure => "link",
       owner  => $web_user,
       group  => $web_group,
