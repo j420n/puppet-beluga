@@ -90,7 +90,7 @@ define beluga::drupal_site (
 
     notify{ "Make file found for ${name} at ${$make_file_path}": }
     exec{ "drush-make-${name}":
-      command => "/usr/local/bin/drush make ${make_file_path} ${make_build_path}/${site_url}",
+      command => "/usr/local/bin/drush make ${make_file_path} ${make_build_path}",
       require  => Exec["remove_drush_build-${name}"],
     }
 
