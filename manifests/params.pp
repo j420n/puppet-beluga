@@ -33,7 +33,7 @@ class beluga::params {
   $jdk_package = 'default-jdk'
   $jre_package = 'default-jre'
   $apache_port = 8000
-  $php_memory_limit = '256M'
+  $php_memory_limit = hiera('beluga::params:php_memory_limit','256M')
 
   $lamp_servers = [{
   name          => 'lamp_servers',
